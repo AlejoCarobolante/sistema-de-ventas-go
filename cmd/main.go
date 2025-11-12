@@ -1,13 +1,14 @@
 package main
 
 import (
-	"gorm-template/bootstrap"
+	"log"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	route "gorm-template/api/route"
+	"gorm-template/api/route"
+	"gorm-template/bootstrap"
 )
 
 func main() {
@@ -16,9 +17,12 @@ func main() {
 
 	timeout := time.Duration(env.ContextTimeout) * time.Second
 
-	gin := gin.Default()
-	gin.Use(cors.Default())
+	router := gin.Default()
+	router.Use(cors.Default())
 
-	route.Setup(env, timeout, gin)
-	gin.Run(env.ServerAddress)
+	route.Setup(env, timeout, router)
+
+	if err := router.Run(env.ServerAddress); err != nil {
+		log.Fatalf("error al iniciar el servidor: %v", err)
+	}
 }
