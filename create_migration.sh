@@ -1,0 +1,1 @@
+./migrate.exe create -ext .sql -dir ./migrations -seq $1

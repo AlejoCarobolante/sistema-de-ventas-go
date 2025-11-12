@@ -1,0 +1,1 @@
+migrate create -ext .sql dur ./migrations -seq $1
