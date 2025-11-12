@@ -1,0 +1,12 @@
+name: Deploy API Ventas
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  call-pipeline:
+    uses: alejocarobolante/pipelines-cicd/.github/workflows/prod.yml@main
+    secrets: inherit
+    with:
+      IMAGE_NAME: go-api-sistema-ventas

@@ -8,18 +8,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type Entity1 struct {
+type EstadoPedido struct {
 	ID        uuid.UUID      `json:"id" gorm:"type:uuid;default:uuid_generate_v4()"`
-	Name      string         `json:"name"`
+	NombreEP      string         `json:"nameEP"`
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 
-type Entity1Repository interface {
-	Create(c context.Context, entity1 Entity1) error
-	Fetch(c context.Context) ([]Entity1, error)
-	FetchById(c context.Context, id int) (Entity1, error)
-	Update(c context.Context, updatedEntity1 Entity1) error
+type EstadoPedidoRepository interface {
+	Create(c context.Context, estadopedido EstadoPedido) error
+	Fetch(c context.Context) ([]EstadoPedido, error)
+	FetchById(c context.Context, id int) (EstadoPedido, error)
+	Update(c context.Context, updatedEstadoPedido EstadoPedido) error
 	Delete(c context.Context, id int) error
 }

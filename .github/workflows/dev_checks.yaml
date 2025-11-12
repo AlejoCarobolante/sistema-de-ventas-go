@@ -1,0 +1,13 @@
+name: Call Dev Checks Pipeline
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+      - master
+
+jobs:
+  call-dev-checks:
+    uses: AlejoCarobolante/pipelines-cicd/.github/workflows/dev-checks.yml@main
+    secrets: inherit
