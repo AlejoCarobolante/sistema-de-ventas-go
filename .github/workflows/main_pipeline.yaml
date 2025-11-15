@@ -1,4 +1,4 @@
-name: Deploy API Ventas
+name: Deploy API Parking
 
 on:
   push:
@@ -9,4 +9,4 @@ jobs:
     uses: alejocarobolante/pipelines-cicd/.github/workflows/prod.yml@main
     secrets: inherit
     with:
-      IMAGE_NAME: go-api-sistema-ventas
+      IMAGE_NAME: go-api-sistema-parking
