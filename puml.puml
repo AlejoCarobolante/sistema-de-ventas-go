@@ -7,7 +7,7 @@ class Client {
   + clientId: String
   + name: String
   + email: String
-  + balance: double
+  + cellPhone: string
   + book(spotId: String, start: Date, end: Date): Reservation
   + cancelReservation(reservaId: String): void
 }
@@ -43,9 +43,18 @@ class Reservation {
   + reservaId: String
   + start: Date
   + end: Date
-  + status: String
   + calculateDurationHoras(): int
   + calculateCost(t: Rate): double
+}
+
+class ReservationStatus {
+  + rsName: String
+  + rsID: String
+}
+
+class ReservationType {
+  + rtID: String
+  + rtName: String
 }
 
 class Rate {
@@ -100,6 +109,10 @@ class Penalty {
 }
 
 ' Relaciones Unidireccionales
+' Relaciones de Reserva
+Reservation"1" --> "*" ReservationType: has
+Reservation "1" --> "*" ReservationStatus : isIn
+
 ' Composición: Parking contiene Spots
 Parking "1" *-- "*" Spot : has
 

@@ -15,8 +15,6 @@ func Setup(env *bootstrap.Env, timeout time.Duration, gin *gin.Engine) {
 	//protectedRouter := gin.Group("/api")
 
 	//Todas las API Privadas
-	NewPedidoRouter(env, timeout, publicRouter)
-	NewEstadoPedidoRouter(env, timeout, publicRouter)
-	NewProductoRouter(env, timeout, publicRouter)
-	NewPagoRouter(env, timeout, publicRouter)
+	NewReservationRouter(env, timeout, publicRouter)
+	NewClientRouter(env, timeout, publicRouter)
 }
