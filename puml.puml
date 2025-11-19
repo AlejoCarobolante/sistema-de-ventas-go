@@ -15,9 +15,9 @@ class Client {
 class Vehicle {
   + vehicleId: String
   + licensePlate: String
-  + make: String
+  + maker: String
   + model: String
-  + type: String
+  + color: String
 }
 
 class Parking {

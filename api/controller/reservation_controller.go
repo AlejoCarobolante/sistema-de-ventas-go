@@ -24,12 +24,12 @@ func (te *ReservationController) Create(c *gin.Context) { //Hay que ingresar tod
 	}
 
 	if Reservation.Start.IsZero() {
-		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Numero is required"})
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Start is required"})
 		return
 	}
 
 	if Reservation.End.IsZero(){
-		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Numero is required"})
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "End is required"})
 		return
 	} 
 	Reservation.ReservationID = uuid.New()
