@@ -51,7 +51,7 @@ El modelo evita sobrecargar entidades transaccionales con lógica de negocio o c
 
 ## 📂 Estructura del Proyecto
 *(Ejemplo sugerido para implementación)*
-```bash
+
 .
 ├── api/
 │   ├── controller/          # Controladores para manejar las solicitudes HTTP
