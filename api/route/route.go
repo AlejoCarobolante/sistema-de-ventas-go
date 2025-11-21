@@ -19,4 +19,5 @@ func Setup(env *bootstrap.Env, timeout time.Duration, gin *gin.Engine) {
 	NewClientRouter(env, timeout, publicRouter)
 	NewVehicleRouter(env, timeout, publicRouter)
 	NewParkingRouter(env, timeout, publicRouter)
+	NewSpotRouter(env, timeout, publicRouter)
 }
