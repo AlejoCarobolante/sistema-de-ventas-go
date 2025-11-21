@@ -90,7 +90,7 @@ class VehicleType {
 class SpotType {
   + spotTypeId: String
   + name: String
-  + minDimensions: double
+  + minArea: double
 }
 
 class CompatibilityRule {
