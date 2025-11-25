@@ -9,7 +9,7 @@ import (
 
 type ReservationUseCase struct{}
 
-func (eu *ReservationUseCase) Create(c context.Context, reservation domain.Reservation) error {
+func (rvu *ReservationUseCase) Create(c context.Context, reservation domain.Reservation) error {
 	db := bootstrap.DB
 	err := db.Create(&reservation)
 	if err.Error != nil {
@@ -18,7 +18,7 @@ func (eu *ReservationUseCase) Create(c context.Context, reservation domain.Reser
 	return nil
 }
 
-func (eu *ReservationUseCase) Fetch(c context.Context) ([]domain.Reservation, error) {
+func (rvu *ReservationUseCase) Fetch(c context.Context) ([]domain.Reservation, error) {
 	db := bootstrap.DB
 	entity := []domain.Reservation{}
 	err := db.Find(&entity)
@@ -28,7 +28,7 @@ func (eu *ReservationUseCase) Fetch(c context.Context) ([]domain.Reservation, er
 	return entity, nil
 }
 
-func (eu *ReservationUseCase) FetchById(c context.Context, id int) (domain.Reservation, error) {
+func (rvu *ReservationUseCase) FetchById(c context.Context, id int) (domain.Reservation, error) {
 	db := bootstrap.DB
 	pedido := domain.Reservation{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -38,7 +38,7 @@ func (eu *ReservationUseCase) FetchById(c context.Context, id int) (domain.Reser
 	return pedido, nil
 }
 
-func (eu *ReservationUseCase) Update(c context.Context, updatedReservation domain.Reservation) error {
+func (rvu *ReservationUseCase) Update(c context.Context, updatedReservation domain.Reservation) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedReservation).
 		Omit("deleted_at", "created_at").
@@ -48,7 +48,7 @@ func (eu *ReservationUseCase) Update(c context.Context, updatedReservation domai
 	return nil
 }
 
-func (eu *ReservationUseCase) Delete(c context.Context, id int) error {
+func (rvu *ReservationUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.Reservation{})
 	if err.Error != nil {

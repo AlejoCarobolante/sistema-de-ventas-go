@@ -14,7 +14,7 @@ type TimeSlotController struct {
 	TimeSlotRepository domain.TimeSlotRepository
 }
 
-func (te *TimeSlotController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
+func (tsc *TimeSlotController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
 	var TimeSlot domain.TimeSlot
 
 	err := c.ShouldBind(&TimeSlot)
@@ -24,14 +24,13 @@ func (te *TimeSlotController) Create(c *gin.Context) { //Hay que ingresar todos 
 	}
 
 	if TimeSlot.DayOfWeek == "" {
-	c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Day of Week is required"})
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Day of Week is required"})
 		return
 	}
 
-
 	TimeSlot.TimeSlotID = uuid.New()
 
-	err = te.TimeSlotRepository.Create(c, TimeSlot)
+	err = tsc.TimeSlotRepository.Create(c, TimeSlot)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -42,8 +41,8 @@ func (te *TimeSlotController) Create(c *gin.Context) { //Hay que ingresar todos 
 	})
 }
 
-func (te *TimeSlotController) Fetch(c *gin.Context) {
-	TimeSlots, err := te.TimeSlotRepository.Fetch(c)
+func (tsc *TimeSlotController) Fetch(c *gin.Context) {
+	TimeSlots, err := tsc.TimeSlotRepository.Fetch(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -52,13 +51,13 @@ func (te *TimeSlotController) Fetch(c *gin.Context) {
 	c.JSON(http.StatusOK, TimeSlots)
 }
 
-func (te *TimeSlotController) FetchById(c *gin.Context) {
+func (tsc *TimeSlotController) FetchById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-	TimeSlots, err := te.TimeSlotRepository.FetchById(c, id)
+	TimeSlots, err := tsc.TimeSlotRepository.FetchById(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -66,7 +65,7 @@ func (te *TimeSlotController) FetchById(c *gin.Context) {
 	c.JSON(http.StatusOK, TimeSlots)
 }
 
-func (te *TimeSlotController) Update(c *gin.Context) {
+func (tsc *TimeSlotController) Update(c *gin.Context) {
 	updatedTimeSlot := &domain.TimeSlot{}
 
 	err := c.ShouldBind(updatedTimeSlot)
@@ -80,19 +79,19 @@ func (te *TimeSlotController) Update(c *gin.Context) {
 		return
 	}
 
-	err = te.TimeSlotRepository.Update(c, *updatedTimeSlot)
+	err = tsc.TimeSlotRepository.Update(c, *updatedTimeSlot)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "TimeSlot updated succesfully"})
 }
 
-func (te *TimeSlotController) Delete(c *gin.Context) {
+func (tsc *TimeSlotController) Delete(c *gin.Context) {
 	TimeSlotID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
-	err = te.TimeSlotRepository.Delete(c, TimeSlotID)
+	err = tsc.TimeSlotRepository.Delete(c, TimeSlotID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}

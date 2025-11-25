@@ -8,7 +8,7 @@ import (
 
 type ParkingUseCase struct{}
 
-func (eu *ParkingUseCase) Create(c context.Context, parking domain.Parking) error {
+func (pu *ParkingUseCase) Create(c context.Context, parking domain.Parking) error {
 	db := bootstrap.DB
 	err := db.Create(&parking)
 	if err.Error != nil {
@@ -17,7 +17,7 @@ func (eu *ParkingUseCase) Create(c context.Context, parking domain.Parking) erro
 	return nil
 }
 
-func (eu *ParkingUseCase) Fetch(c context.Context) ([]domain.Parking, error) {
+func (pu *ParkingUseCase) Fetch(c context.Context) ([]domain.Parking, error) {
 	db := bootstrap.DB
 	entity := []domain.Parking{}
 	err := db.Find(&entity)
@@ -27,7 +27,7 @@ func (eu *ParkingUseCase) Fetch(c context.Context) ([]domain.Parking, error) {
 	return entity, nil
 }
 
-func (eu *ParkingUseCase) FetchById(c context.Context, id int) (domain.Parking, error) {
+func (pu *ParkingUseCase) FetchById(c context.Context, id int) (domain.Parking, error) {
 	db := bootstrap.DB
 	pedido := domain.Parking{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -37,7 +37,7 @@ func (eu *ParkingUseCase) FetchById(c context.Context, id int) (domain.Parking, 
 	return pedido, nil
 }
 
-func (eu *ParkingUseCase) Update(c context.Context, updatedparking domain.Parking) error {
+func (pu *ParkingUseCase) Update(c context.Context, updatedparking domain.Parking) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedparking).
 		Omit("deleted_at", "created_at").
@@ -47,7 +47,7 @@ func (eu *ParkingUseCase) Update(c context.Context, updatedparking domain.Parkin
 	return nil
 }
 
-func (eu *ParkingUseCase) Delete(c context.Context, id int) error {
+func (pu *ParkingUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.Parking{})
 	if err.Error != nil {

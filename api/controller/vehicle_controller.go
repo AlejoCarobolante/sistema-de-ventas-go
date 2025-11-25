@@ -14,7 +14,7 @@ type VehicleController struct {
 	VehicleRepository domain.VehicleRepository
 }
 
-func (te *VehicleController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
+func (vc *VehicleController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
 	var Vehicle domain.Vehicle
 
 	err := c.ShouldBind(&Vehicle)
@@ -30,7 +30,7 @@ func (te *VehicleController) Create(c *gin.Context) { //Hay que ingresar todos l
 
 	Vehicle.VehicleID = uuid.New()
 
-	err = te.VehicleRepository.Create(c, Vehicle)
+	err = vc.VehicleRepository.Create(c, Vehicle)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -41,8 +41,8 @@ func (te *VehicleController) Create(c *gin.Context) { //Hay que ingresar todos l
 	})
 }
 
-func (te *VehicleController) Fetch(c *gin.Context) {
-	Vehicles, err := te.VehicleRepository.Fetch(c)
+func (vc *VehicleController) Fetch(c *gin.Context) {
+	Vehicles, err := vc.VehicleRepository.Fetch(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -51,13 +51,13 @@ func (te *VehicleController) Fetch(c *gin.Context) {
 	c.JSON(http.StatusOK, Vehicles)
 }
 
-func (te *VehicleController) FetchById(c *gin.Context) {
+func (vc *VehicleController) FetchById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-	Vehicles, err := te.VehicleRepository.FetchById(c, id)
+	Vehicles, err := vc.VehicleRepository.FetchById(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -65,7 +65,7 @@ func (te *VehicleController) FetchById(c *gin.Context) {
 	c.JSON(http.StatusOK, Vehicles)
 }
 
-func (te *VehicleController) Update(c *gin.Context) {
+func (vc *VehicleController) Update(c *gin.Context) {
 	updatedVehicle := &domain.Vehicle{}
 
 	err := c.ShouldBind(updatedVehicle)
@@ -79,19 +79,19 @@ func (te *VehicleController) Update(c *gin.Context) {
 		return
 	}
 
-	err = te.VehicleRepository.Update(c, *updatedVehicle)
+	err = vc.VehicleRepository.Update(c, *updatedVehicle)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "Vehicle updated succesfully"})
 }
 
-func (te *VehicleController) Delete(c *gin.Context) {
+func (vc *VehicleController) Delete(c *gin.Context) {
 	VehicleID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
-	err = te.VehicleRepository.Delete(c, VehicleID)
+	err = vc.VehicleRepository.Delete(c, VehicleID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}

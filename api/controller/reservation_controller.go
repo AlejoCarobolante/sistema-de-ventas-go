@@ -14,7 +14,7 @@ type ReservationController struct {
 	ReservationRepository domain.ReservationRepository
 }
 
-func (te *ReservationController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
+func (rtc *ReservationController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
 	var Reservation domain.Reservation
 
 	err := c.ShouldBind(&Reservation)
@@ -28,13 +28,13 @@ func (te *ReservationController) Create(c *gin.Context) { //Hay que ingresar tod
 		return
 	}
 
-	if Reservation.End.IsZero(){
+	if Reservation.End.IsZero() {
 		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "End is required"})
 		return
-	} 
+	}
 	Reservation.ReservationID = uuid.New()
 
-	err = te.ReservationRepository.Create(c, Reservation)
+	err = rtc.ReservationRepository.Create(c, Reservation)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -45,8 +45,8 @@ func (te *ReservationController) Create(c *gin.Context) { //Hay que ingresar tod
 	})
 }
 
-func (te *ReservationController) Fetch(c *gin.Context) {
-	Reservations, err := te.ReservationRepository.Fetch(c)
+func (rtc *ReservationController) Fetch(c *gin.Context) {
+	Reservations, err := rtc.ReservationRepository.Fetch(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -55,13 +55,13 @@ func (te *ReservationController) Fetch(c *gin.Context) {
 	c.JSON(http.StatusOK, Reservations)
 }
 
-func (te *ReservationController) FetchById(c *gin.Context) {
+func (rtc *ReservationController) FetchById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-	Reservations, err := te.ReservationRepository.FetchById(c, id)
+	Reservations, err := rtc.ReservationRepository.FetchById(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -69,7 +69,7 @@ func (te *ReservationController) FetchById(c *gin.Context) {
 	c.JSON(http.StatusOK, Reservations)
 }
 
-func (te *ReservationController) Update(c *gin.Context) {
+func (rtc *ReservationController) Update(c *gin.Context) {
 	updatedReservation := &domain.Reservation{}
 
 	err := c.ShouldBind(updatedReservation)
@@ -83,19 +83,19 @@ func (te *ReservationController) Update(c *gin.Context) {
 		return
 	}
 
-	err = te.ReservationRepository.Update(c, *updatedReservation)
+	err = rtc.ReservationRepository.Update(c, *updatedReservation)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "Reservation updated succesfully"})
 }
 
-func (te *ReservationController) Delete(c *gin.Context) {
+func (rtc *ReservationController) Delete(c *gin.Context) {
 	ReservationID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
-	err = te.ReservationRepository.Delete(c, ReservationID)
+	err = rtc.ReservationRepository.Delete(c, ReservationID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}

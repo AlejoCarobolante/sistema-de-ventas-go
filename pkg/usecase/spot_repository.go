@@ -8,7 +8,7 @@ import (
 
 type SpotUseCase struct{}
 
-func (eu *SpotUseCase) Create(c context.Context, spot domain.Spot) error {
+func (su *SpotUseCase) Create(c context.Context, spot domain.Spot) error {
 	db := bootstrap.DB
 	err := db.Create(&spot)
 	if err.Error != nil {
@@ -17,7 +17,7 @@ func (eu *SpotUseCase) Create(c context.Context, spot domain.Spot) error {
 	return nil
 }
 
-func (eu *SpotUseCase) Fetch(c context.Context) ([]domain.Spot, error) {
+func (su *SpotUseCase) Fetch(c context.Context) ([]domain.Spot, error) {
 	db := bootstrap.DB
 	entity := []domain.Spot{}
 	err := db.Find(&entity)
@@ -27,7 +27,7 @@ func (eu *SpotUseCase) Fetch(c context.Context) ([]domain.Spot, error) {
 	return entity, nil
 }
 
-func (eu *SpotUseCase) FetchById(c context.Context, id int) (domain.Spot, error) {
+func (su *SpotUseCase) FetchById(c context.Context, id int) (domain.Spot, error) {
 	db := bootstrap.DB
 	pedido := domain.Spot{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -37,7 +37,7 @@ func (eu *SpotUseCase) FetchById(c context.Context, id int) (domain.Spot, error)
 	return pedido, nil
 }
 
-func (eu *SpotUseCase) Update(c context.Context, updatedspot domain.Spot) error {
+func (su *SpotUseCase) Update(c context.Context, updatedspot domain.Spot) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedspot).
 		Omit("deleted_at", "created_at").
@@ -47,7 +47,7 @@ func (eu *SpotUseCase) Update(c context.Context, updatedspot domain.Spot) error 
 	return nil
 }
 
-func (eu *SpotUseCase) Delete(c context.Context, id int) error {
+func (su *SpotUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.Spot{})
 	if err.Error != nil {

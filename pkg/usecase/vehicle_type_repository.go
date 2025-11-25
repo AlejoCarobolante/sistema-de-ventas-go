@@ -8,7 +8,7 @@ import (
 
 type VehicleTypeUseCase struct{}
 
-func (eu *VehicleTypeUseCase) Create(c context.Context, vehicleType domain.VehicleType) error {
+func (vtu *VehicleTypeUseCase) Create(c context.Context, vehicleType domain.VehicleType) error {
 	db := bootstrap.DB
 	err := db.Create(&vehicleType)
 	if err.Error != nil {
@@ -17,7 +17,7 @@ func (eu *VehicleTypeUseCase) Create(c context.Context, vehicleType domain.Vehic
 	return nil
 }
 
-func (eu *VehicleTypeUseCase) Fetch(c context.Context) ([]domain.VehicleType, error) {
+func (vtu *VehicleTypeUseCase) Fetch(c context.Context) ([]domain.VehicleType, error) {
 	db := bootstrap.DB
 	entity := []domain.VehicleType{}
 	err := db.Find(&entity)
@@ -27,7 +27,7 @@ func (eu *VehicleTypeUseCase) Fetch(c context.Context) ([]domain.VehicleType, er
 	return entity, nil
 }
 
-func (eu *VehicleTypeUseCase) FetchById(c context.Context, id int) (domain.VehicleType, error) {
+func (vtu *VehicleTypeUseCase) FetchById(c context.Context, id int) (domain.VehicleType, error) {
 	db := bootstrap.DB
 	pedido := domain.VehicleType{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -37,7 +37,7 @@ func (eu *VehicleTypeUseCase) FetchById(c context.Context, id int) (domain.Vehic
 	return pedido, nil
 }
 
-func (eu *VehicleTypeUseCase) Update(c context.Context, updatedvehicleType domain.VehicleType) error {
+func (vtu *VehicleTypeUseCase) Update(c context.Context, updatedvehicleType domain.VehicleType) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedvehicleType).
 		Omit("deleted_at", "created_at").
@@ -47,7 +47,7 @@ func (eu *VehicleTypeUseCase) Update(c context.Context, updatedvehicleType domai
 	return nil
 }
 
-func (eu *VehicleTypeUseCase) Delete(c context.Context, id int) error {
+func (vtu *VehicleTypeUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.VehicleType{})
 	if err.Error != nil {

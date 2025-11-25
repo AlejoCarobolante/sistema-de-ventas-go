@@ -14,7 +14,7 @@ type ReservationStatusController struct {
 	ReservationStatusRepository domain.ReservationStatusRepository
 }
 
-func (te *ReservationStatusController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
+func (rsc *ReservationStatusController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
 	var ReservationStatus domain.ReservationStatus
 
 	err := c.ShouldBind(&ReservationStatus)
@@ -24,14 +24,13 @@ func (te *ReservationStatusController) Create(c *gin.Context) { //Hay que ingres
 	}
 
 	if ReservationStatus.RSName == "" {
-	c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Name is required"})
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Name is required"})
 		return
 	}
 
-
 	ReservationStatus.ReservationStatusID = uuid.New()
 
-	err = te.ReservationStatusRepository.Create(c, ReservationStatus)
+	err = rsc.ReservationStatusRepository.Create(c, ReservationStatus)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -42,8 +41,8 @@ func (te *ReservationStatusController) Create(c *gin.Context) { //Hay que ingres
 	})
 }
 
-func (te *ReservationStatusController) Fetch(c *gin.Context) {
-	ReservationStatuss, err := te.ReservationStatusRepository.Fetch(c)
+func (rsc *ReservationStatusController) Fetch(c *gin.Context) {
+	ReservationStatuss, err := rsc.ReservationStatusRepository.Fetch(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -52,13 +51,13 @@ func (te *ReservationStatusController) Fetch(c *gin.Context) {
 	c.JSON(http.StatusOK, ReservationStatuss)
 }
 
-func (te *ReservationStatusController) FetchById(c *gin.Context) {
+func (rsc *ReservationStatusController) FetchById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-	ReservationStatuss, err := te.ReservationStatusRepository.FetchById(c, id)
+	ReservationStatuss, err := rsc.ReservationStatusRepository.FetchById(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -66,7 +65,7 @@ func (te *ReservationStatusController) FetchById(c *gin.Context) {
 	c.JSON(http.StatusOK, ReservationStatuss)
 }
 
-func (te *ReservationStatusController) Update(c *gin.Context) {
+func (rsc *ReservationStatusController) Update(c *gin.Context) {
 	updatedReservationStatus := &domain.ReservationStatus{}
 
 	err := c.ShouldBind(updatedReservationStatus)
@@ -80,19 +79,19 @@ func (te *ReservationStatusController) Update(c *gin.Context) {
 		return
 	}
 
-	err = te.ReservationStatusRepository.Update(c, *updatedReservationStatus)
+	err = rsc.ReservationStatusRepository.Update(c, *updatedReservationStatus)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "ReservationStatus updated succesfully"})
 }
 
-func (te *ReservationStatusController) Delete(c *gin.Context) {
+func (rsc *ReservationStatusController) Delete(c *gin.Context) {
 	ReservationStatusID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
-	err = te.ReservationStatusRepository.Delete(c, ReservationStatusID)
+	err = rsc.ReservationStatusRepository.Delete(c, ReservationStatusID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}

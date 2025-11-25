@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewClientRoute(env *bootstrap.Env, timeout time.Duration, group *gin.RouterGroup) {
+func NewClientRouter(env *bootstrap.Env, timeout time.Duration, group *gin.RouterGroup) {
 	cc := &controller.ClientController{
 		ClientRepository: &usecase.ClientUseCase{},
 	}

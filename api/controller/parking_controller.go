@@ -14,7 +14,7 @@ type ParkingController struct {
 	ParkingRepository domain.ParkingRepository
 }
 
-func (te *ParkingController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
+func (pc *ParkingController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
 	var Parking domain.Parking
 
 	err := c.ShouldBind(&Parking)
@@ -25,7 +25,7 @@ func (te *ParkingController) Create(c *gin.Context) { //Hay que ingresar todos l
 
 	Parking.ParkingID = uuid.New()
 
-	err = te.ParkingRepository.Create(c, Parking)
+	err = pc.ParkingRepository.Create(c, Parking)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -36,8 +36,8 @@ func (te *ParkingController) Create(c *gin.Context) { //Hay que ingresar todos l
 	})
 }
 
-func (te *ParkingController) Fetch(c *gin.Context) {
-	Parkings, err := te.ParkingRepository.Fetch(c)
+func (pc *ParkingController) Fetch(c *gin.Context) {
+	Parkings, err := pc.ParkingRepository.Fetch(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -46,13 +46,13 @@ func (te *ParkingController) Fetch(c *gin.Context) {
 	c.JSON(http.StatusOK, Parkings)
 }
 
-func (te *ParkingController) FetchById(c *gin.Context) {
+func (pc *ParkingController) FetchById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-	Parkings, err := te.ParkingRepository.FetchById(c, id)
+	Parkings, err := pc.ParkingRepository.FetchById(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -60,7 +60,7 @@ func (te *ParkingController) FetchById(c *gin.Context) {
 	c.JSON(http.StatusOK, Parkings)
 }
 
-func (te *ParkingController) Update(c *gin.Context) {
+func (pc *ParkingController) Update(c *gin.Context) {
 	updatedParking := &domain.Parking{}
 
 	err := c.ShouldBind(updatedParking)
@@ -74,19 +74,19 @@ func (te *ParkingController) Update(c *gin.Context) {
 		return
 	}
 
-	err = te.ParkingRepository.Update(c, *updatedParking)
+	err = pc.ParkingRepository.Update(c, *updatedParking)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "Parking updated succesfully"})
 }
 
-func (te *ParkingController) Delete(c *gin.Context) {
+func (pc *ParkingController) Delete(c *gin.Context) {
 	ParkingID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
-	err = te.ParkingRepository.Delete(c, ParkingID)
+	err = pc.ParkingRepository.Delete(c, ParkingID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
