@@ -8,7 +8,7 @@ import (
 
 type CompatibilityRuleUseCase struct{}
 
-func (eu *CompatibilityRuleUseCase) Create(c context.Context, compatibilityRule domain.CompatibilityRule) error {
+func (cru *CompatibilityRuleUseCase) Create(c context.Context, compatibilityRule domain.CompatibilityRule) error {
 	db := bootstrap.DB
 	err := db.Create(&compatibilityRule)
 	if err.Error != nil {
@@ -17,7 +17,7 @@ func (eu *CompatibilityRuleUseCase) Create(c context.Context, compatibilityRule 
 	return nil
 }
 
-func (eu *CompatibilityRuleUseCase) Fetch(c context.Context) ([]domain.CompatibilityRule, error) {
+func (cru *CompatibilityRuleUseCase) Fetch(c context.Context) ([]domain.CompatibilityRule, error) {
 	db := bootstrap.DB
 	entity := []domain.CompatibilityRule{}
 	err := db.Find(&entity)
@@ -27,7 +27,7 @@ func (eu *CompatibilityRuleUseCase) Fetch(c context.Context) ([]domain.Compatibi
 	return entity, nil
 }
 
-func (eu *CompatibilityRuleUseCase) FetchById(c context.Context, id int) (domain.CompatibilityRule, error) {
+func (cru *CompatibilityRuleUseCase) FetchById(c context.Context, id int) (domain.CompatibilityRule, error) {
 	db := bootstrap.DB
 	pedido := domain.CompatibilityRule{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -37,7 +37,7 @@ func (eu *CompatibilityRuleUseCase) FetchById(c context.Context, id int) (domain
 	return pedido, nil
 }
 
-func (eu *CompatibilityRuleUseCase) Update(c context.Context, updatedcompatibilityRule domain.CompatibilityRule) error {
+func (cru *CompatibilityRuleUseCase) Update(c context.Context, updatedcompatibilityRule domain.CompatibilityRule) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedcompatibilityRule).
 		Omit("deleted_at", "created_at").
@@ -47,7 +47,7 @@ func (eu *CompatibilityRuleUseCase) Update(c context.Context, updatedcompatibili
 	return nil
 }
 
-func (eu *CompatibilityRuleUseCase) Delete(c context.Context, id int) error {
+func (cru *CompatibilityRuleUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.CompatibilityRule{})
 	if err.Error != nil {

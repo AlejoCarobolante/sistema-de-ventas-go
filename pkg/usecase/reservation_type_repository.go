@@ -8,7 +8,7 @@ import (
 
 type ReservationTypeUseCase struct{}
 
-func (eu *ReservationTypeUseCase) Create(c context.Context, reservationType domain.ReservationType) error {
+func (rtu *ReservationTypeUseCase) Create(c context.Context, reservationType domain.ReservationType) error {
 	db := bootstrap.DB
 	err := db.Create(&reservationType)
 	if err.Error != nil {
@@ -17,7 +17,7 @@ func (eu *ReservationTypeUseCase) Create(c context.Context, reservationType doma
 	return nil
 }
 
-func (eu *ReservationTypeUseCase) Fetch(c context.Context) ([]domain.ReservationType, error) {
+func (rtu *ReservationTypeUseCase) Fetch(c context.Context) ([]domain.ReservationType, error) {
 	db := bootstrap.DB
 	entity := []domain.ReservationType{}
 	err := db.Find(&entity)
@@ -27,7 +27,7 @@ func (eu *ReservationTypeUseCase) Fetch(c context.Context) ([]domain.Reservation
 	return entity, nil
 }
 
-func (eu *ReservationTypeUseCase) FetchById(c context.Context, id int) (domain.ReservationType, error) {
+func (rtu *ReservationTypeUseCase) FetchById(c context.Context, id int) (domain.ReservationType, error) {
 	db := bootstrap.DB
 	pedido := domain.ReservationType{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -37,7 +37,7 @@ func (eu *ReservationTypeUseCase) FetchById(c context.Context, id int) (domain.R
 	return pedido, nil
 }
 
-func (eu *ReservationTypeUseCase) Update(c context.Context, updatedreservationType domain.ReservationType) error {
+func (rtu *ReservationTypeUseCase) Update(c context.Context, updatedreservationType domain.ReservationType) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedreservationType).
 		Omit("deleted_at", "created_at").
@@ -47,7 +47,7 @@ func (eu *ReservationTypeUseCase) Update(c context.Context, updatedreservationTy
 	return nil
 }
 
-func (eu *ReservationTypeUseCase) Delete(c context.Context, id int) error {
+func (rtu *ReservationTypeUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.ReservationType{})
 	if err.Error != nil {

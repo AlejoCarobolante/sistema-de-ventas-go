@@ -1,10 +1,8 @@
 package controller
 
 import (
-	"net/http"
-	"strconv"
-
 	"gorm-template/domain"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -14,86 +12,75 @@ type ClientController struct {
 	ClientRepository domain.ClientRepository
 }
 
-func (te *ClientController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
-	var Client domain.Client
+func (cc *ClientController) Create(c *gin.Context) {
+	var client domain.Client
 
-	err := c.ShouldBind(&Client)
+	err := c.ShouldBind(&client)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-
-	if Client.ClientName == "" {
-		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Name is required"})
+	if client.Name == "" || client.Email == "" {
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Nombre y Mail requeridos"})
 		return
 	}
 
-	Client.ClientID = uuid.New()
+	client.ID = uuid.New()
 
-	err = te.ClientRepository.Create(c, Client)
+	err = cc.ClientRepository.Create(c, client)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, domain.SuccessResponse{
-		Message: "Client created successfully",
+		Message: "Client create successfully",
 	})
 }
 
-func (te *ClientController) Fetch(c *gin.Context) {
-	Clients, err := te.ClientRepository.Fetch(c)
+func (cc *ClientController) Fetch(c *gin.Context) {
+	clients, err := cc.ClientRepository.Fetch(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-
-	c.JSON(http.StatusOK, Clients)
+	c.JSON(http.StatusOK, clients)
 }
 
-func (te *ClientController) FetchById(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+func (cc *ClientController) FetchByID(c *gin.Context) {
+	clientID := c.Param("id")
+	client, err := cc.ClientRepository.FetchByID(c, clientID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
-		return
 	}
-	Clients, err := te.ClientRepository.FetchById(c, id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, Clients)
+	c.JSON(http.StatusOK, client)
 }
 
-func (te *ClientController) Update(c *gin.Context) {
-	updatedClient := &domain.Client{}
+func (cc *ClientController) Update(c *gin.Context) {
+	updateClient := &domain.Client{}
+	err := c.ShouldBind(updateClient)
 
-	err := c.ShouldBind(updatedClient)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-
-	if updatedClient.ClientID == uuid.Nil {
-		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "ID Client is requiered to update"})
+	if updateClient.ID == uuid.Nil {
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "ID requerido"})
 		return
 	}
 
-	err = te.ClientRepository.Update(c, *updatedClient)
+	err = cc.ClientRepository.Update(c, *updateClient)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
-	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "Client updated succesfully"})
+	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "Client updated successfully"})
 }
 
-func (te *ClientController) Delete(c *gin.Context) {
-	ClientID, err := strconv.Atoi(c.Param("id"))
+func (cc *ClientController) Delete(c *gin.Context) {
+	clientID := c.Param("id")
+	err := cc.ClientRepository.Delete(c, clientID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
-	err = te.ClientRepository.Delete(c, ClientID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
-	}
-	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "Client delete succesfully"})
+	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "Client deleted successfully"})
 }

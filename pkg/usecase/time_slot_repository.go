@@ -8,7 +8,7 @@ import (
 
 type TimeSlotUseCase struct{}
 
-func (eu *TimeSlotUseCase) Create(c context.Context, timeSlot domain.TimeSlot) error {
+func (tu *TimeSlotUseCase) Create(c context.Context, timeSlot domain.TimeSlot) error {
 	db := bootstrap.DB
 	err := db.Create(&timeSlot)
 	if err.Error != nil {
@@ -17,7 +17,7 @@ func (eu *TimeSlotUseCase) Create(c context.Context, timeSlot domain.TimeSlot) e
 	return nil
 }
 
-func (eu *TimeSlotUseCase) Fetch(c context.Context) ([]domain.TimeSlot, error) {
+func (tu *TimeSlotUseCase) Fetch(c context.Context) ([]domain.TimeSlot, error) {
 	db := bootstrap.DB
 	entity := []domain.TimeSlot{}
 	err := db.Find(&entity)
@@ -27,7 +27,7 @@ func (eu *TimeSlotUseCase) Fetch(c context.Context) ([]domain.TimeSlot, error) {
 	return entity, nil
 }
 
-func (eu *TimeSlotUseCase) FetchById(c context.Context, id int) (domain.TimeSlot, error) {
+func (tu *TimeSlotUseCase) FetchById(c context.Context, id int) (domain.TimeSlot, error) {
 	db := bootstrap.DB
 	pedido := domain.TimeSlot{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -37,7 +37,7 @@ func (eu *TimeSlotUseCase) FetchById(c context.Context, id int) (domain.TimeSlot
 	return pedido, nil
 }
 
-func (eu *TimeSlotUseCase) Update(c context.Context, updatedtimeSlot domain.TimeSlot) error {
+func (tu *TimeSlotUseCase) Update(c context.Context, updatedtimeSlot domain.TimeSlot) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedtimeSlot).
 		Omit("deleted_at", "created_at").
@@ -47,7 +47,7 @@ func (eu *TimeSlotUseCase) Update(c context.Context, updatedtimeSlot domain.Time
 	return nil
 }
 
-func (eu *TimeSlotUseCase) Delete(c context.Context, id int) error {
+func (tu *TimeSlotUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.TimeSlot{})
 	if err.Error != nil {

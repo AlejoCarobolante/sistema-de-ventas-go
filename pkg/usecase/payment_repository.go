@@ -8,7 +8,7 @@ import (
 
 type PaymentUseCase struct{}
 
-func (eu *PaymentUseCase) Create(c context.Context, payment domain.Payment) error {
+func (pyu *PaymentUseCase) Create(c context.Context, payment domain.Payment) error {
 	db := bootstrap.DB
 	err := db.Create(&payment)
 	if err.Error != nil {
@@ -17,7 +17,7 @@ func (eu *PaymentUseCase) Create(c context.Context, payment domain.Payment) erro
 	return nil
 }
 
-func (eu *PaymentUseCase) Fetch(c context.Context) ([]domain.Payment, error) {
+func (pyu *PaymentUseCase) Fetch(c context.Context) ([]domain.Payment, error) {
 	db := bootstrap.DB
 	entity := []domain.Payment{}
 	err := db.Find(&entity)
@@ -27,7 +27,7 @@ func (eu *PaymentUseCase) Fetch(c context.Context) ([]domain.Payment, error) {
 	return entity, nil
 }
 
-func (eu *PaymentUseCase) FetchById(c context.Context, id int) (domain.Payment, error) {
+func (pyu *PaymentUseCase) FetchById(c context.Context, id int) (domain.Payment, error) {
 	db := bootstrap.DB
 	pedido := domain.Payment{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -37,7 +37,7 @@ func (eu *PaymentUseCase) FetchById(c context.Context, id int) (domain.Payment, 
 	return pedido, nil
 }
 
-func (eu *PaymentUseCase) Update(c context.Context, updatedpayment domain.Payment) error {
+func (pyu *PaymentUseCase) Update(c context.Context, updatedpayment domain.Payment) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedpayment).
 		Omit("deleted_at", "created_at").
@@ -47,7 +47,7 @@ func (eu *PaymentUseCase) Update(c context.Context, updatedpayment domain.Paymen
 	return nil
 }
 
-func (eu *PaymentUseCase) Delete(c context.Context, id int) error {
+func (pyu *PaymentUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.Payment{})
 	if err.Error != nil {

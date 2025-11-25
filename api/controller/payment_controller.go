@@ -14,7 +14,7 @@ type PaymentController struct {
 	PaymentRepository domain.PaymentRepository
 }
 
-func (te *PaymentController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
+func (pac *PaymentController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
 	var Payment domain.Payment
 
 	err := c.ShouldBind(&Payment)
@@ -24,14 +24,13 @@ func (te *PaymentController) Create(c *gin.Context) { //Hay que ingresar todos l
 	}
 
 	if Payment.PaymentAmmount == 0 {
-	c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Ammount is required"})
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Ammount is required"})
 		return
 	}
 
-
 	Payment.PaymentID = uuid.New()
 
-	err = te.PaymentRepository.Create(c, Payment)
+	err = pac.PaymentRepository.Create(c, Payment)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -42,8 +41,8 @@ func (te *PaymentController) Create(c *gin.Context) { //Hay que ingresar todos l
 	})
 }
 
-func (te *PaymentController) Fetch(c *gin.Context) {
-	Payments, err := te.PaymentRepository.Fetch(c)
+func (pac *PaymentController) Fetch(c *gin.Context) {
+	Payments, err := pac.PaymentRepository.Fetch(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -52,13 +51,13 @@ func (te *PaymentController) Fetch(c *gin.Context) {
 	c.JSON(http.StatusOK, Payments)
 }
 
-func (te *PaymentController) FetchById(c *gin.Context) {
+func (pac *PaymentController) FetchById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-	Payments, err := te.PaymentRepository.FetchById(c, id)
+	Payments, err := pac.PaymentRepository.FetchById(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -66,7 +65,7 @@ func (te *PaymentController) FetchById(c *gin.Context) {
 	c.JSON(http.StatusOK, Payments)
 }
 
-func (te *PaymentController) Update(c *gin.Context) {
+func (pac *PaymentController) Update(c *gin.Context) {
 	updatedPayment := &domain.Payment{}
 
 	err := c.ShouldBind(updatedPayment)
@@ -80,19 +79,19 @@ func (te *PaymentController) Update(c *gin.Context) {
 		return
 	}
 
-	err = te.PaymentRepository.Update(c, *updatedPayment)
+	err = pac.PaymentRepository.Update(c, *updatedPayment)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "Payment updated succesfully"})
 }
 
-func (te *PaymentController) Delete(c *gin.Context) {
+func (pac *PaymentController) Delete(c *gin.Context) {
 	PaymentID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
-	err = te.PaymentRepository.Delete(c, PaymentID)
+	err = pac.PaymentRepository.Delete(c, PaymentID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}

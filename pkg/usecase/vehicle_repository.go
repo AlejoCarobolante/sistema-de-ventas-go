@@ -9,7 +9,7 @@ import (
 
 type VehicleUseCase struct{}
 
-func (eu *VehicleUseCase) Create(c context.Context, vehicle domain.Vehicle) error {
+func (vu *VehicleUseCase) Create(c context.Context, vehicle domain.Vehicle) error {
 	db := bootstrap.DB
 	err := db.Create(&vehicle)
 	if err.Error != nil {
@@ -18,7 +18,7 @@ func (eu *VehicleUseCase) Create(c context.Context, vehicle domain.Vehicle) erro
 	return nil
 }
 
-func (eu *VehicleUseCase) Fetch(c context.Context) ([]domain.Vehicle, error) {
+func (vu *VehicleUseCase) Fetch(c context.Context) ([]domain.Vehicle, error) {
 	db := bootstrap.DB
 	entity := []domain.Vehicle{}
 	err := db.Find(&entity)
@@ -28,7 +28,7 @@ func (eu *VehicleUseCase) Fetch(c context.Context) ([]domain.Vehicle, error) {
 	return entity, nil
 }
 
-func (eu *VehicleUseCase) FetchById(c context.Context, id int) (domain.Vehicle, error) {
+func (vu *VehicleUseCase) FetchById(c context.Context, id int) (domain.Vehicle, error) {
 	db := bootstrap.DB
 	pedido := domain.Vehicle{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -38,7 +38,7 @@ func (eu *VehicleUseCase) FetchById(c context.Context, id int) (domain.Vehicle, 
 	return pedido, nil
 }
 
-func (eu *VehicleUseCase) Update(c context.Context, updatedVehicle domain.Vehicle) error {
+func (vu *VehicleUseCase) Update(c context.Context, updatedVehicle domain.Vehicle) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedVehicle).
 		Omit("deleted_at", "created_at").
@@ -48,7 +48,7 @@ func (eu *VehicleUseCase) Update(c context.Context, updatedVehicle domain.Vehicl
 	return nil
 }
 
-func (eu *VehicleUseCase) Delete(c context.Context, id int) error {
+func (vu *VehicleUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.Vehicle{})
 	if err.Error != nil {

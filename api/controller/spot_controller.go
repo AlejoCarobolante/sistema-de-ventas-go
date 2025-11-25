@@ -14,7 +14,7 @@ type SpotController struct {
 	SpotRepository domain.SpotRepository
 }
 
-func (te *SpotController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
+func (sc *SpotController) Create(c *gin.Context) { //Hay que ingresar todos los datos necesarios para crear
 	var Spot domain.Spot
 
 	err := c.ShouldBind(&Spot)
@@ -25,7 +25,7 @@ func (te *SpotController) Create(c *gin.Context) { //Hay que ingresar todos los 
 
 	Spot.SpotID = uuid.New()
 
-	err = te.SpotRepository.Create(c, Spot)
+	err = sc.SpotRepository.Create(c, Spot)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -36,8 +36,8 @@ func (te *SpotController) Create(c *gin.Context) { //Hay que ingresar todos los 
 	})
 }
 
-func (te *SpotController) Fetch(c *gin.Context) {
-	Spots, err := te.SpotRepository.Fetch(c)
+func (sc *SpotController) Fetch(c *gin.Context) {
+	Spots, err := sc.SpotRepository.Fetch(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -46,13 +46,13 @@ func (te *SpotController) Fetch(c *gin.Context) {
 	c.JSON(http.StatusOK, Spots)
 }
 
-func (te *SpotController) FetchById(c *gin.Context) {
+func (sc *SpotController) FetchById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-	Spots, err := te.SpotRepository.FetchById(c, id)
+	Spots, err := sc.SpotRepository.FetchById(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
@@ -60,7 +60,7 @@ func (te *SpotController) FetchById(c *gin.Context) {
 	c.JSON(http.StatusOK, Spots)
 }
 
-func (te *SpotController) Update(c *gin.Context) {
+func (sc *SpotController) Update(c *gin.Context) {
 	updatedSpot := &domain.Spot{}
 
 	err := c.ShouldBind(updatedSpot)
@@ -74,19 +74,19 @@ func (te *SpotController) Update(c *gin.Context) {
 		return
 	}
 
-	err = te.SpotRepository.Update(c, *updatedSpot)
+	err = sc.SpotRepository.Update(c, *updatedSpot)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "Spot updated succesfully"})
 }
 
-func (te *SpotController) Delete(c *gin.Context) {
+func (sc *SpotController) Delete(c *gin.Context) {
 	SpotID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
-	err = te.SpotRepository.Delete(c, SpotID)
+	err = sc.SpotRepository.Delete(c, SpotID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}

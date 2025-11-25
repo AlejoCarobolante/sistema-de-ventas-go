@@ -8,7 +8,7 @@ import (
 
 type ClientUseCase struct{}
 
-func (eu *ClientUseCase) Create(c context.Context, client domain.Client) error {
+func (cu *ClientUseCase) Create(c context.Context, client domain.Client) error {
 	db := bootstrap.DB
 	err := db.Create(&client)
 	if err.Error != nil {
@@ -17,40 +17,40 @@ func (eu *ClientUseCase) Create(c context.Context, client domain.Client) error {
 	return nil
 }
 
-func (eu *ClientUseCase) Fetch(c context.Context) ([]domain.Client, error) {
+func (cu *ClientUseCase) Fetch(c context.Context) ([]domain.Client, error) {
 	db := bootstrap.DB
-	entity := []domain.Client{}
-	err := db.Find(&entity)
+	clients := []domain.Client{}
+	err := db.Find(&clients)
 	if err.Error != nil {
 		return nil, err.Error
 	}
-	return entity, nil
+	return clients, nil
 }
 
-func (eu *ClientUseCase) FetchById(c context.Context, id int) (domain.Client, error) {
+func (cu *ClientUseCase) FetchByID(c context.Context, id string) (domain.Client, error) {
 	db := bootstrap.DB
-	pedido := domain.Client{}
-	err := db.Where("id = ?", id).First(&pedido)
-	if err.Error != nil {
+	client := domain.Client{}
+	err := db.Where("id=?", id).First(&client)
+	if err != nil {
 		return domain.Client{}, err.Error
 	}
-	return pedido, nil
+	return client, nil
 }
 
-func (eu *ClientUseCase) Update(c context.Context, updatedclient domain.Client) error {
+func (cu *ClientUseCase) Update(c context.Context, updateClient domain.Client) error {
 	db := bootstrap.DB
-	if err := db.Model(&updatedclient).
-		Omit("deleted_at", "created_at").
-		Updates(updatedclient).Error; err != nil {
+	if err := db.Model(&updateClient).
+		Omit("delete_at", "create_at").
+		Updates(updateClient).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (eu *ClientUseCase) Delete(c context.Context, id int) error {
+func (cu *ClientUseCase) Delete(c context.Context, id string) error {
 	db := bootstrap.DB
-	err := db.Where("id = ?", id).Delete(&domain.Client{})
-	if err.Error != nil {
+	err := db.Where("id=?", id).Delete(&domain.Client{})
+	if err != nil {
 		return err.Error
 	}
 	return nil

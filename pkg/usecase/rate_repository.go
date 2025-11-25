@@ -8,7 +8,7 @@ import (
 
 type RateUseCase struct{}
 
-func (eu *RateUseCase) Create(c context.Context, rate domain.Rate) error {
+func (ru *RateUseCase) Create(c context.Context, rate domain.Rate) error {
 	db := bootstrap.DB
 	err := db.Create(&rate)
 	if err.Error != nil {
@@ -17,7 +17,7 @@ func (eu *RateUseCase) Create(c context.Context, rate domain.Rate) error {
 	return nil
 }
 
-func (eu *RateUseCase) Fetch(c context.Context) ([]domain.Rate, error) {
+func (ru *RateUseCase) Fetch(c context.Context) ([]domain.Rate, error) {
 	db := bootstrap.DB
 	entity := []domain.Rate{}
 	err := db.Find(&entity)
@@ -27,7 +27,7 @@ func (eu *RateUseCase) Fetch(c context.Context) ([]domain.Rate, error) {
 	return entity, nil
 }
 
-func (eu *RateUseCase) FetchById(c context.Context, id int) (domain.Rate, error) {
+func (ru *RateUseCase) FetchById(c context.Context, id int) (domain.Rate, error) {
 	db := bootstrap.DB
 	pedido := domain.Rate{}
 	err := db.Where("id = ?", id).First(&pedido)
@@ -37,7 +37,7 @@ func (eu *RateUseCase) FetchById(c context.Context, id int) (domain.Rate, error)
 	return pedido, nil
 }
 
-func (eu *RateUseCase) Update(c context.Context, updatedrate domain.Rate) error {
+func (ru *RateUseCase) Update(c context.Context, updatedrate domain.Rate) error {
 	db := bootstrap.DB
 	if err := db.Model(&updatedrate).
 		Omit("deleted_at", "created_at").
@@ -47,7 +47,7 @@ func (eu *RateUseCase) Update(c context.Context, updatedrate domain.Rate) error 
 	return nil
 }
 
-func (eu *RateUseCase) Delete(c context.Context, id int) error {
+func (ru *RateUseCase) Delete(c context.Context, id int) error {
 	db := bootstrap.DB
 	err := db.Where("id = ?", id).Delete(&domain.Rate{})
 	if err.Error != nil {
