@@ -33,7 +33,6 @@ class Spot {
   + spotId: String
   + code: String
   + level: String
-  + type: String
   + isAvailable: boolean
   + markOccupied(): void
   + freeSpot(): void
@@ -91,7 +90,7 @@ class VehicleType {
 class SpotType {
   + spotTypeId: String
   + name: String
-  + minDimensions: double
+  + minArea: double
 }
 
 class CompatibilityRule {
@@ -132,6 +131,7 @@ CompatibilityRule "1" --> "1" SpotType : against
 ' Tarifas
 Rate "1" --> "*" Parking : appliesTo
 Rate "1" --> "*" TimeSlot : validFor
+Penalty "*" --> TimeSlot: changesBy
 
 ' Flujo Transaccional (Reservation es el centro)
 Reservation "1" --> "1" Spot : books
