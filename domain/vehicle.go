@@ -9,14 +9,16 @@ import (
 )
 
 type Vehicle struct {
-	VehicleID       uuid.UUID      `json:"id" gorm:"type:uuid;default:uuid_generate_v4()"`
-	LicensePlate      string         `json:"plate"`
-	Maker      string   `json:"maker"`
-	Model      string     `json:"model"`
-	Color      string     `json:"color"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `json:"deleted_at"`
+	VehicleID    uuid.UUID      `json:"id" gorm:"type:uuid;default:uuid_generate_v4()"`
+	LicensePlate string         `json:"plate"`
+	Maker        string         `json:"maker"`
+	Model        string         `json:"model"`
+	Color        string         `json:"color"`
+	CientId      string         `json:"client_id"`
+	Client       Client         `json:"client"`
+	CreatedAt    time.Time      `json:"created_at"`
+	UpdatedAt    time.Time      `json:"updated_at"`
+	DeletedAt    gorm.DeletedAt `json:"deleted_at"`
 }
 
 type VehicleRepository interface {
